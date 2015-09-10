@@ -1,36 +1,65 @@
 # DashingResque
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dashing_resque`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem provides widgets and jobs to displayed queued/failed Resque jobs in Dashing.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your application's `Gemfile`:
 
 ```ruby
 gem 'dashing_resque'
 ```
 
-And then execute:
+Add this to your `config.ru`:
 
-    $ bundle
+```ruby
+require 'dashing_resque'
+require 'sinatra'
+DashingResque.init
+```
 
-Or install it yourself as:
+Require the scripts in your `application.coffee`:
 
-    $ gem install dashing_resque
+```coffee
+#= require dashing_resque/assets/widgets
+```
 
-## Usage
+Require the styles in your `application.css`:
 
-TODO: Write usage instructions here
+```scss
+//=require dashing_resque/assets/widgets
+```
 
-## Development
+Schedule the jobs in `jobs/resque.rb`
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake none` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+```ruby
+DashingResque::Jobs::FailedJobs.schedule '30s', first_in: 0
+DashingResque::Jobs::QueuedJobs.schedule '30s', first_in: 0
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Use the widgets in your dashboard:
+
+```html
+<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+  <div data-id="resque_queued_jobs" data-view="ResqueList" data-title="Queued Resque Jobs" data-total-prefix="Total: "></div>
+</li>
+
+<li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
+  <div data-id="resque_failed_jobs" data-view="ResqueList" data-title="Failed Resque Jobs" data-total-prefix="Total: "></div>
+</li>
+```
+
+## Configuration
+
+Configure the redis url in `config/resque.html`:
+
+```yaml
+development:
+  redis_url: redis://localhost:6379
+production:
+  redis_url: redis://someotherhost:6379
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dashing_resque.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/werliefertwas/dashing_resque.
