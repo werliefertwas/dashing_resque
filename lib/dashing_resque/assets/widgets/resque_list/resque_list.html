@@ -1,0 +1,14 @@
+<h1 class="title" data-bind="title"></h1>
+
+<div class="total" data-bind="total | prettyNumber | prepend totalPrefix"></div>
+
+<table>
+  <tr data-foreach-item="items">
+    <td data-bind="item.queue"></td>
+    <td data-bind="item.value | prettyNumber"></td>
+  </tr>
+</table>
+
+<p class="more-info" data-bind="moreinfo"></p>
+
+<p class="updated-at" data-bind="updatedAtMessage"></p>
