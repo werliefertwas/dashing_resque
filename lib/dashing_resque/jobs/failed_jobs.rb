@@ -3,21 +3,27 @@ module DashingResque
     module FailedJobs
       extend DashingResque::Job
 
-      def self.data
-        queues = Resque.redis.smembers('queues').sort
+      class << self
+        def data
+          queues = Resque.redis.smembers('queues').sort
 
-        failure_queues = queues.map do |queue|
-          [queue, Resque::Failure.failure_queue_name(queue)]
-        end.to_h
+          items = failure_queues(queues).map do |queue|
+            {
+              queue: queue,
+              value: Resque.redis.llen(failure_queues[queue]).to_i
+            }
+          end
 
-        items = queues.map do |queue|
-          {
-            queue: queue,
-            value: Resque.redis.llen(failure_queues[queue]).to_i
-          }
+          { items: items }
         end
 
-        { items: items }
+        private
+
+        def failure_queues(queues)
+          queues.map do |queue|
+            [queue, Resque::Failure.failure_queue_name(queue)]
+          end.to_h
+        end
       end
     end
   end

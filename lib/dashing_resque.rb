@@ -16,13 +16,18 @@ module DashingResque
     def init
       config = parse_config
       Resque.redis = config['redis_url']
-      Sinatra::Application.settings.sprockets.append_path(File.expand_path(File.dirname(__FILE__)))
+      Sinatra::Application.settings.sprockets.append_path(assets_path)
     end
 
     private
 
     def parse_config
-      YAML.load_file(File.join(Sinatra::Application.settings.root, *%w(config resque.yml)))[ENV['RACK_ENV']]
+      config_file = File.join(Sinatra::Application.settings.root, *%w(config resque.yml))
+      YAML.load_file(config_file)[ENV['RACK_ENV']]
+    end
+
+    def assets_path
+      File.expand_path(File.dirname(__FILE__))
     end
   end
 end
