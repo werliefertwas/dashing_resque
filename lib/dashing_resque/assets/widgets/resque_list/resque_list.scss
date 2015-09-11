@@ -1,0 +1,38 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  rgb(255, 155, 0);
+$value-color:       #fff;
+
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+// ----------------------------------------------------------------------------
+// Widget-number styles
+// ----------------------------------------------------------------------------
+.widget-resque-list {
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+  }
+
+  .value {
+    color: $value-color;
+  }
+
+  .more-info {
+    color: $moreinfo-color;
+  }
+
+  .updated-at {
+    color: rgba(0, 0, 0, 0.3);
+  }
+
+  // table tr td:nth-child(0) {
+  table tr td {
+    text-align: right;
+    padding-right: 25px
+  }
+}
